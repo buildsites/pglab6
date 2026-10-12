@@ -1,0 +1,24 @@
+# 10. Employee Performance Management System
+
+class Employee:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def performance(self, score):
+        print("\nEmployee Name:", self.name)
+        print("Salary:", self.salary)
+        print("Performance Score:", score)
+        if score >= 80:
+            print("Appraisal: Excellent")
+        elif score >= 60:
+            print("Appraisal: Good")
+        else:
+            print("Appraisal: Average")
+
+
+name = input("Enter employee name: ")
+salary = int(input("Enter salary: "))
+score = int(input("Enter performance score: "))
+e = Employee(name, salary)
+e.performance(score)

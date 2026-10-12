@@ -1,0 +1,38 @@
+# 5. Data Cleaning and Preprocessing
+
+import pandas as pd
+
+# Sample Dataset
+data = {
+    "Name": ["Alice", "Bob", "Charlie", "David", "Eva"],
+    "Age": [20, None, 22, 100, 21],
+    "Gender": ["F", "M", "F", "M", None],
+    "Marks": [85, 90, None, 40, 95]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+print("Original Dataset")
+print(df)
+
+# Fill missing values
+df["Age"] = df["Age"].fillna(df["Age"].mean())
+df["Marks"] = df["Marks"].fillna(df["Marks"].mean())
+df["Gender"] = df["Gender"].fillna("Unknown")
+
+# Remove duplicate rows
+df = df.drop_duplicates()
+
+# Remove outliers (Age > 60)
+df = df[df["Age"] <= 60]
+
+# Encode categorical data
+gender = {"M": 0, "F": 1, "Unknown": 2}
+df["Gender"] = df["Gender"].map(gender)
+
+# Rename column
+df = df.rename(columns={"Marks": "Score"})
+
+print("\nCleaned Dataset")
+print(df)

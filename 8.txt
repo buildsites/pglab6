@@ -1,0 +1,16 @@
+# 8. CUSTOMER SEGMENTATION
+
+import numpy as np
+import pandas as pd
+from sklearn.cluster import KMeans
+
+np.random.seed(42)
+df = pd.DataFrame({
+    'Income': np.random.randint(15, 120, 100),
+    'Score': np.random.randint(1, 100, 100)
+})
+
+kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
+df['Cluster'] = kmeans.fit_predict(df)
+
+print(df.groupby('Cluster').mean())

@@ -1,0 +1,36 @@
+# 4. Inventory Management System
+
+class Inventory:
+    def __init__(self, product, stock):
+        self.product = product
+        self.stock = stock
+
+    def add(self, qty):
+        self.stock += qty
+        print("Stock Added")
+
+    def sell(self, qty):
+        if qty <= self.stock:
+            self.stock -= qty
+            print("Product Sold")
+        else:
+            print("Out of Stock")
+
+    def display(self):
+        print("Product:", self.product)
+        print("Stock:", self.stock)
+
+
+name = input("Enter Product Name: ")
+stock = int(input("Enter Stock: "))
+
+item = Inventory(name, stock)
+item.display()
+
+qty = int(input("Enter Stock to Add: "))
+item.add(qty)
+
+qty = int(input("Enter Quantity to Sell: "))
+item.sell(qty)
+
+item.display()

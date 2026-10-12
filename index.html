@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PG LAB 6 Practice programs</title>
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --heading-color: #111827;
+            --border-color: #e5e7eb;
+            --btn-bg: #e5e7eb;
+            --btn-text: #374151;
+            --btn-hover: #d1d5db;
+            --code-bg: #f9fafb;
+            --requirement-bg: #fef3c7;
+            --requirement-text: #92400e;
+            --accent-color: #3b82f6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 1.5rem;
+            line-height: 1.5;
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        h1 {
+            color: var(--heading-color);
+            font-size: 1.75rem;
+            font-weight: 800;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin: 0;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        /* Sidebar Table of Contents */
+        .sidebar {
+            width: 300px;
+            position: sticky;
+            top: 1.5rem;
+            max-height: calc(100vh - 3rem);
+            overflow-y: auto;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: var(--heading-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: block;
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+            line-height: 1.3;
+            border-left: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+            border-left-color: var(--accent-color);
+        }
+
+        .package-requirement {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.8rem;
+        }
+
+        .package-requirement ul {
+            margin: 0.25rem 0 0 0;
+            padding-left: 1.25rem;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        /* Program Cards */
+        .program-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            scroll-margin-top: 1.5rem;
+        }
+
+        .card-header {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            background-color: #fafafa;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--heading-color);
+            font-weight: 600;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .copy-btn {
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--btn-hover);
+        }
+
+        .copy-btn.copied {
+            background-color: #10b981;
+            color: white;
+        }
+
+        /* Requirements Alert box */
+        .requirement-box {
+            background-color: var(--requirement-bg);
+            color: var(--requirement-text);
+            padding: 0.5rem 1.25rem;
+            font-size: 0.8rem;
+            border-bottom: 1px solid rgba(220, 38, 38, 0.05);
+            font-weight: 500;
+        }
+
+        .code-container {
+            position: relative;
+            margin: 0;
+        }
+
+        pre {
+            margin: 0;
+            padding: 1rem;
+            overflow: auto;
+            max-height: 200px;
+            background-color: var(--code-bg);
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.8rem;
+            color: #1f2937;
+        }
+
+        /* Toast feedback */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #10b981;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            font-size: 0.875rem;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(1rem);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                position: relative;
+                top: 0;
+                max-height: none;
+                margin-bottom: 1.5rem;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PG LAB 6 Practice programs</h1>
+</header>
+
+<div class="main-layout">
+    <!-- Sidebar Table of Contents -->
+    <aside class="sidebar">
+        <h2>Programs List</h2>
+        <nav class="nav-links">
+            <a href="#prog-1" onclick="redirectAndCopy('prog-1', 'code-1', this, event)">1. Bank Management System</a>
+            <a href="#prog-2" onclick="redirectAndCopy('prog-2', 'code-2', this, event)">2. Library Management System</a>
+            <a href="#prog-3" onclick="redirectAndCopy('prog-3', 'code-3', this, event)">3. Student Grading System</a>
+            <a href="#prog-4" onclick="redirectAndCopy('prog-4', 'code-4', this, event)">4. Inventory Management System</a>
+            <a href="#prog-5" onclick="redirectAndCopy('prog-5', 'code-5', this, event)">5. Data Cleaning and Preprocessing</a>
+            <a href="#prog-6" onclick="redirectAndCopy('prog-6', 'code-6', this, event)">6. EXPLORATORY DATA ANALYSIS</a>
+            <a href="#prog-7" onclick="redirectAndCopy('prog-7', 'code-7', this, event)">7. Iris Flower Classification</a>
+            <a href="#prog-8" onclick="redirectAndCopy('prog-8', 'code-8', this, event)">8. CUSTOMER SEGMENTATION</a>
+            <a href="#prog-9" onclick="redirectAndCopy('prog-9', 'code-9', this, event)">9. House Prediction system</a>
+            <a href="#prog-10" onclick="redirectAndCopy('prog-10', 'code-10', this, event)">10. Employee Performance Management System</a>
+            <a href="#prog-11" onclick="redirectAndCopy('prog-11', 'code-11', this, event)">11. Email Spam Detection</a>
+            <a href="#prog-12" onclick="redirectAndCopy('prog-12', 'code-12', this, event)">12. Handwritten Digit Recognition</a>
+            <a href="#prog-13" onclick="redirectAndCopy('prog-13', 'code-13', this, event)">13. Image Segmentation</a>
+            <a href="#prog-14" onclick="redirectAndCopy('prog-14', 'code-14', this, event)">14. Document Clustering</a>
+            <a href="#prog-15" onclick="redirectAndCopy('prog-15', 'code-15', this, event)">15. Stock Price Forecasting</a>
+            <a href="#prog-16" onclick="redirectAndCopy('prog-16', 'code-16', this, event)">16. Student Performance Prediction</a>
+        </nav>
+
+        <div class="package-requirement">
+            <strong>Required Packages:</strong>
+            <ul>
+                <li>pandas</li>
+                <li>matplotlib</li>
+                <li>scikit-learn</li>
+                <li>opencv-python</li>
+                <li>numpy</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+        <!-- 1. Bank Management System -->
+        <div class="program-card" id="prog-1">
+            <div class="card-header">
+                <h2>1. Bank Management System</h2>
+                <button class="copy-btn" id="btn-code-1" onclick="copyCode('code-1', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-1">class BankAccount:
+    def __init__(self, name, balance):
+        self.name = name
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+        print("Amount Deposited:", amount)
+
+    def withdraw(self, amount):
+        if amount <= self.balance:
+            self.balance -= amount
+            print("Amount Withdrawn:", amount)
+        else:
+            print("Insufficient Balance")
+
+    def interest(self, rate):
+        interest = self.balance * rate / 100
+        self.balance += interest
+        print("Interest Added:", interest)
+
+    def display(self):
+        print("\nAccount Holder:", self.name)
+        print("Current Balance:", self.balance)
+
+
+name = input("Enter Account Holder Name: ")
+balance = float(input("Enter Initial Balance: "))
+
+account = BankAccount(name, balance)
+
+while True:
+    print("\n1. Deposit")
+    print("2. Withdraw")
+    print("3. Add Interest")
+    print("4. Display Balance")
+    print("5. Exit")
+
+    choice = int(input("Enter your choice: "))
+
+    if choice == 1:
+        amount = float(input("Enter Deposit Amount: "))
+        account.deposit(amount)
+
+    elif choice == 2:
+        amount = float(input("Enter Withdrawal Amount: "))
+        account.withdraw(amount)
+
+    elif choice == 3:
+        rate = float(input("Enter Interest Rate (%): "))
+        account.interest(rate)
+
+    elif choice == 4:
+        account.display()
+
+    elif choice == 5:
+        print("Thank You!")
+        break
+
+    else:
+        print("Invalid Choice")</code></pre>
+            </div>
+        </div>
+
+        <!-- 2. Library Management System -->
+        <div class="program-card" id="prog-2">
+            <div class="card-header">
+                <h2>2. Library Management System</h2>
+                <button class="copy-btn" id="btn-code-2" onclick="copyCode('code-2', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-2">class Library:
+    def __init__(self):
+        self.books = ["Python", "Java", "C++"]
+        self.members = ["Alice", "Bob"]
+
+    def show(self):
+        print("Books:", self.books)
+        print("Members:", self.members)
+
+    def borrow(self, member, book):
+        if member in self.members and book in self.books:
+            self.books.remove(book)
+            print(member, "borrowed", book)
+        else:
+            print("Book or Member not found")
+
+
+lib = Library()
+lib.show()
+lib.borrow("Alice", "Python")
+lib.show()</code></pre>
+            </div>
+        </div>
+
+        <!-- 3. Student Grading System -->
+        <div class="program-card" id="prog-3">
+            <div class="card-header">
+                <h2>3. Student Grading System</h2>
+                <button class="copy-btn" id="btn-code-3" onclick="copyCode('code-3', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-3">class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+
+    def display(self):
+        print("Name:", self.name)
+        print("Marks:", self.marks)
+
+        if self.marks >= 90:
+            print("Grade: A")
+        elif self.marks >= 75:
+            print("Grade: B")
+        elif self.marks >= 50:
+            print("Grade: C")
+        else:
+            print("Grade: F")
+
+
+name = input("Enter Student Name: ")
+marks = int(input("Enter Marks: "))
+
+s = Student(name, marks)
+s.display()</code></pre>
+            </div>
+        </div>
+
+        <!-- 4. Inventory Management System -->
+        <div class="program-card" id="prog-4">
+            <div class="card-header">
+                <h2>4. Inventory Management System:</h2>
+                <button class="copy-btn" id="btn-code-4" onclick="copyCode('code-4', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-4">class Inventory:
+    def __init__(self, product, stock):
+        self.product = product
+        self.stock = stock
+
+    def add(self, qty):
+        self.stock += qty
+        print("Stock Added")
+
+    def sell(self, qty):
+        if qty <= self.stock:
+            self.stock -= qty
+            print("Product Sold")
+        else:
+            print("Out of Stock")
+
+    def display(self):
+        print("Product:", self.product)
+        print("Stock:", self.stock)
+
+
+name = input("Enter Product Name: ")
+stock = int(input("Enter Stock: "))
+
+item = Inventory(name, stock)
+item.display()
+
+qty = int(input("Enter Stock to Add: "))
+item.add(qty)
+
+qty = int(input("Enter Quantity to Sell: "))
+item.sell(qty)
+
+item.display()</code></pre>
+            </div>
+        </div>
+
+        <!-- 5. Data Cleaning and Preprocessing -->
+        <div class="program-card" id="prog-5">
+            <div class="card-header">
+                <h2>5. Data Cleaning and Preprocessing</h2>
+                <button class="copy-btn" id="btn-code-5" onclick="copyCode('code-5', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-5">import pandas as pd
+
+# Sample Dataset
+data = {
+    "Name": ["Alice", "Bob", "Charlie", "David", "Eva"],
+    "Age": [20, None, 22, 100, 21],
+    "Gender": ["F", "M", "F", "M", None],
+    "Marks": [85, 90, None, 40, 95]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+print("Original Dataset")
+print(df)
+
+# Fill missing values
+df["Age"] = df["Age"].fillna(df["Age"].mean())
+df["Marks"] = df["Marks"].fillna(df["Marks"].mean())
+df["Gender"] = df["Gender"].fillna("Unknown")
+
+# Remove duplicate rows
+df = df.drop_duplicates()
+
+# Remove outliers (Age > 60)
+df = df[df["Age"] <= 60]
+
+# Encode categorical data
+gender = {"M": 0, "F": 1, "Unknown": 2}
+df["Gender"] = df["Gender"].map(gender)
+
+# Rename column
+df = df.rename(columns={"Marks": "Score"})
+
+print("\nCleaned Dataset")
+print(df)</code></pre>
+            </div>
+        </div>
+
+        <!-- 6. EXPLORATORY DATA ANALYSIS -->
+        <div class="program-card" id="prog-6">
+            <div class="card-header">
+                <h2>6. EXPLORATORY DATA ANALYSIS</h2>
+                <button class="copy-btn" id="btn-code-6" onclick="copyCode('code-6', this)">Copy Code</button>
+            </div>
+
+            <div class="code-container">
+<pre><code id="code-6"># Simple Exploratory Data Analysis (EDA)
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+# Load default Iris dataset
+iris = load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+# Display data
+print(df.head())
+
+# Summary statistics
+print(df.describe())
+
+# Check missing values
+print(df.isnull().sum())
+
+# Histogram
+df.hist()
+plt.show()
+
+# Box Plot
+df.boxplot()
+plt.show()</code></pre>
+            </div>
+        </div>
+
+        <!-- 7. Iris Flower Classification -->
+        <div class="program-card" id="prog-7">
+            <div class="card-header">
+                <h2>7. Iris Flower Classification:</h2>
+                <button class="copy-btn" id="btn-code-7" onclick="copyCode('code-7', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-7">from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Accuracy
+print("Accuracy:", accuracy_score(y_test, y_pred))</code></pre>
+            </div>
+        </div>
+
+        <!-- 8. CUSTOMER SEGMENTATION -->
+        <div class="program-card" id="prog-8">
+            <div class="card-header">
+                <h2>8. CUSTOMER SEGMENTATION</h2>
+                <button class="copy-btn" id="btn-code-8" onclick="copyCode('code-8', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-8">import numpy as np
+import pandas as pd
+from sklearn.cluster import KMeans
+
+np.random.seed(42)
+df = pd.DataFrame({
+    'Income': np.random.randint(15, 120, 100),
+    'Score': np.random.randint(1, 100, 100)
+})
+
+kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
+df['Cluster'] = kmeans.fit_predict(df)
+
+print(df.groupby('Cluster').mean())</code></pre>
+            </div>
+        </div>
+
+        <!-- 9. House Prediction system -->
+        <div class="program-card" id="prog-9">
+            <div class="card-header">
+                <h2>9. House Prediction system</h2>
+                <button class="copy-btn" id="btn-code-9" onclick="copyCode('code-9', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-9">import pandas as pd
+from sklearn.linear_model import LinearRegression
+data = { "Area": [1000, 1200, 1500, 1800, 2000],
+    "Price": [20, 25, 30, 35, 40] }
+df = pd.DataFrame(data)
+X = df[["Area"]]
+y = df["Price"]
+model = LinearRegression()
+model.fit(X, y)
+new_data = pd.DataFrame({"Area": [1600]})
+prediction = model.predict(new_data)
+print("Predicted House Price:", prediction[0])</code></pre>
+            </div>
+        </div>
+
+        <!-- 10. Employee Performance Management System -->
+        <div class="program-card" id="prog-10">
+            <div class="card-header">
+                <h2>10. Employee Performance Management System</h2>
+                <button class="copy-btn" id="btn-code-10" onclick="copyCode('code-10', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-10">class Employee:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def performance(self, score):
+        print("\nEmployee Name:", self.name)
+        print("Salary:", self.salary)
+        print("Performance Score:", score)
+        if score >= 80:
+            print("Appraisal: Excellent")
+        elif score >= 60:
+            print("Appraisal: Good")
+        else:
+            print("Appraisal: Average")
+
+
+name = input("Enter employee name: ")
+salary = int(input("Enter salary: "))
+score = int(input("Enter performance score: "))
+e = Employee(name, salary)
+e.performance(score)</code></pre>
+            </div>
+        </div>
+
+        <!-- 11. Email Spam Detection -->
+        <div class="program-card" id="prog-11">
+            <div class="card-header">
+                <h2>11. Email Spam Detection</h2>
+                <button class="copy-btn" id="btn-code-11" onclick="copyCode('code-11', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-11">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+emails = [
+    "Win a free prize now",
+    "Congratulations you won a lottery",
+    "Claim your free money",
+    "Meeting at 10 AM tomorrow",
+    "Please submit the assignment",
+    "Let's have a meeting today"
+]
+
+labels = [
+    "spam",
+    "spam",
+    "spam",
+    "ham",
+    "ham",
+    "ham"
+]
+
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(emails)
+
+model = MultinomialNB()
+model.fit(X, labels)
+
+email = input("Enter an email: ")
+email_vector = vectorizer.transform([email])
+result = model.predict(email_vector)
+print("Email Classification:", result[0])</code></pre>
+            </div>
+        </div>
+
+        <!-- 12. Handwritten Digit Recognition -->
+        <div class="program-card" id="prog-12">
+            <div class="card-header">
+                <h2>12. Handwritten Digit Recognition</h2>
+                <button class="copy-btn" id="btn-code-12" onclick="copyCode('code-12', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-12">from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+import matplotlib.pyplot as plt
+
+X, y = fetch_openml("mnist_784", version=1, return_X_y=True, as_frame=False)
+X = X[:5000]
+y = y[:5000]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(X_train, y_train)
+
+prediction = model.predict(X_test)
+print("Actual Digit:", y_test[0])
+print("Predicted Digit:", prediction[0])
+
+plt.imshow(X_test[0].reshape(28, 28), cmap="gray")
+plt.title("Actual: " + y_test[0] + " | Predicted: " + prediction[0])
+plt.axis("off")
+plt.show()</code></pre>
+            </div>
+        </div>
+
+        <!-- 13. Image Segmentation -->
+        <div class="program-card" id="prog-13">
+            <div class="card-header">
+                <h2>13. Image Segmentation</h2>
+                <button class="copy-btn" id="btn-code-13" onclick="copyCode('code-13', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-13">import cv2
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+image = cv2.imread("image.jpg")
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+pixels = image.reshape(-1, 3)
+
+model = KMeans(n_clusters=3, n_init=10)
+model.fit(pixels)
+
+segmented = model.cluster_centers_[model.labels_]
+segmented = segmented.reshape(image.shape).astype("uint8")
+
+plt.subplot(1, 2, 1)
+plt.imshow(image)
+plt.title("Original")
+plt.axis("off")
+
+plt.subplot(1, 2, 2)
+plt.imshow(segmented)
+plt.title("Segmented")
+plt.axis("off")
+
+plt.show()</code></pre>
+            </div>
+        </div>
+
+        <!-- 14. Document Clustering -->
+        <div class="program-card" id="prog-14">
+            <div class="card-header">
+                <h2>14. Document Clustering</h2>
+                <button class="copy-btn" id="btn-code-14" onclick="copyCode('code-14', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-14">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+articles = [
+    "India won the cricket match today",
+    "The cricket team played very well",
+    "New government policy was announced",
+    "The parliament passed a new bill",
+    "Apple launched a new smartphone",
+    "The new smartphone has advanced features"
+]
+
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(articles)
+
+model = KMeans(n_clusters=3, random_state=0, n_init=10)
+model.fit(X)
+
+for i in range(len(articles)):
+    print("Article:", articles[i])
+    print("Cluster:", model.labels_[i])
+    print()
+
+counts = [
+    list(model.labels_).count(0),
+    list(model.labels_).count(1),
+    list(model.labels_).count(2)
+]
+
+plt.bar(["Cluster 0", "Cluster 1", "Cluster 2"], counts)
+plt.xlabel("Clusters")
+plt.ylabel("Number of Articles")
+plt.title("News Article Clustering")
+plt.show()</code></pre>
+            </div>
+        </div>
+
+        <!-- 15. Stock Price Forecasting -->
+        <div class="program-card" id="prog-15">
+            <div class="card-header">
+                <h2>15. Stock Price Forecasting</h2>
+                <button class="copy-btn" id="btn-code-15" onclick="copyCode('code-15', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-15">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+days = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).reshape(-1, 1)
+prices = np.array([100, 102, 105, 107, 110, 112, 115, 117, 120, 123])
+
+model = LinearRegression()
+model.fit(days, prices)
+
+next_day = np.array([[11]])
+prediction = model.predict(next_day)
+print("Predicted Stock Price:", prediction[0])
+
+plt.scatter(days, prices)
+plt.plot(days, model.predict(days))
+plt.xlabel("Day")
+plt.ylabel("Stock Price")
+plt.title("Stock Price Forecasting")
+plt.show()</code></pre>
+            </div>
+        </div>
+
+        <!-- 16. Student Performance Prediction -->
+        <div class="program-card" id="prog-16">
+            <div class="card-header">
+                <h2>16. Student Performance Prediction</h2>
+                <button class="copy-btn" id="btn-code-16" onclick="copyCode('code-16', this)">Copy Code</button>
+            </div>
+            <div class="code-container">
+<pre><code id="code-16">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+X = np.array([
+    [2, 60],
+    [3, 65],
+    [4, 70],
+    [5, 75],
+    [6, 80],
+    [7, 85],
+    [8, 90]
+])
+y = np.array([50, 55, 60, 65, 72, 78, 85])
+
+model = LinearRegression()
+model.fit(X, y)
+
+study = float(input("Enter study hours: "))
+attendance = float(input("Enter attendance: "))
+prediction = model.predict([[study, attendance]])
+print("Predicted Exam Score:", round(prediction[0], 2))
+
+plt.scatter(y, model.predict(X))
+plt.xlabel("Actual Score")
+plt.ylabel("Predicted Score")
+plt.title("Student Performance Prediction")
+plt.show()</code></pre>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Toast notification element -->
+<div id="toast" class="toast">Copied &amp; Redirected!</div>
+
+<script>
+function copyCodeText(codeId) {
+    var codeElement = document.getElementById(codeId);
+    var tempTextArea = document.createElement("textarea");
+    tempTextArea.value = codeElement.textContent;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+    var success = false;
+    try {
+        success = document.execCommand('copy');
+    } catch(err) {
+        console.error('Copy failed', err);
+    }
+    document.body.removeChild(tempTextArea);
+    return success;
+}
+
+// Copy from program card button
+function copyCode(codeId, button) {
+    if (copyCodeText(codeId)) {
+        button.textContent = "Copied!";
+        button.classList.add("copied");
+        setTimeout(function() {
+            button.textContent = "Copy Code";
+            button.classList.remove("copied");
+        }, 1500);
+    }
+}
+
+// Redirect from sidebar + copy code + show toast
+function redirectAndCopy(cardId, codeId, linkElement, event) {
+    event.preventDefault();
+    
+    var targetCard = document.getElementById(cardId);
+    if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    var copied = copyCodeText(codeId);
+    
+    var btn = document.getElementById("btn-" + codeId);
+    if (btn && copied) {
+        btn.textContent = "Copied!";
+        btn.classList.add("copied");
+        setTimeout(function() {
+            btn.textContent = "Copy Code";
+            btn.classList.remove("copied");
+        }, 1500);
+    }
+
+    var toast = document.getElementById("toast");
+    toast.classList.add("show");
+    setTimeout(function() {
+        toast.classList.remove("show");
+    }, 2000);
+}
+</script>
+
+</body>
+</html>

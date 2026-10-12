@@ -1,0 +1,37 @@
+# 14. Document Clustering
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+articles = [
+    "India won the cricket match today",
+    "The cricket team played very well",
+    "New government policy was announced",
+    "The parliament passed a new bill",
+    "Apple launched a new smartphone",
+    "The new smartphone has advanced features"
+]
+
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(articles)
+
+model = KMeans(n_clusters=3, random_state=0, n_init=10)
+model.fit(X)
+
+for i in range(len(articles)):
+    print("Article:", articles[i])
+    print("Cluster:", model.labels_[i])
+    print()
+
+counts = [
+    list(model.labels_).count(0),
+    list(model.labels_).count(1),
+    list(model.labels_).count(2)
+]
+
+plt.bar(["Cluster 0", "Cluster 1", "Cluster 2"], counts)
+plt.xlabel("Clusters")
+plt.ylabel("Number of Articles")
+plt.title("News Article Clustering")
+plt.show()

@@ -1,0 +1,23 @@
+# 2. Library Management System
+
+class Library:
+    def __init__(self):
+        self.books = ["Python", "Java", "C++"]
+        self.members = ["Alice", "Bob"]
+
+    def show(self):
+        print("Books:", self.books)
+        print("Members:", self.members)
+
+    def borrow(self, member, book):
+        if member in self.members and book in self.books:
+            self.books.remove(book)
+            print(member, "borrowed", book)
+        else:
+            print("Book or Member not found")
+
+
+lib = Library()
+lib.show()
+lib.borrow("Alice", "Python")
+lib.show()

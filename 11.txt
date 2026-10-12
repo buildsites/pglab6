@@ -1,0 +1,33 @@
+# 11. Email Spam Detection
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+emails = [
+    "Win a free prize now",
+    "Congratulations you won a lottery",
+    "Claim your free money",
+    "Meeting at 10 AM tomorrow",
+    "Please submit the assignment",
+    "Let's have a meeting today"
+]
+
+labels = [
+    "spam",
+    "spam",
+    "spam",
+    "ham",
+    "ham",
+    "ham"
+]
+
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(emails)
+
+model = MultinomialNB()
+model.fit(X, labels)
+
+email = input("Enter an email: ")
+email_vector = vectorizer.transform([email])
+result = model.predict(email_vector)
+print("Email Classification:", result[0])
