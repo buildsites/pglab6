@@ -1,16 +1,29 @@
-# 8. CUSTOMER SEGMENTATION
+﻿# 8. CUSTOMER SEGMENTATION
 
-import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-np.random.seed(42)
-df = pd.DataFrame({
-    'Income': np.random.randint(15, 120, 100),
-    'Score': np.random.randint(1, 100, 100)
-})
+# Customer purchase data
+data = {
+    'Annual_Spending': [10, 15, 12, 60, 65, 70, 30, 35, 32],
+    'Purchase_Frequency': [2, 3, 2, 8, 9, 8, 5, 4, 5]
+}
 
-kmeans = KMeans(n_clusters=5, random_state=42, n_init=10)
+df = pd.DataFrame(data)
+
+# Apply K-Means clustering
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
 df['Cluster'] = kmeans.fit_predict(df)
 
-print(df.groupby('Cluster').mean())
+print(df)
+
+# Display customer groups
+plt.scatter(df['Annual_Spending'],
+            df['Purchase_Frequency'],
+            c=df['Cluster'])
+
+plt.xlabel('Annual Spending')
+plt.ylabel('Purchase Frequency')
+plt.title('Customer Segmentation')
+plt.show()
